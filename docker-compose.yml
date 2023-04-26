@@ -1,0 +1,41 @@
+services:
+  breedbase:
+    volumes:
+    - webdata:/home/production/volume
+    - type: bind
+      source: /home/production/panthee.sgn.cornell.edu/crontab
+      target: /etc/crontab
+    - type: bind
+      source: /home/production/db_dumps
+      target: /db_dumps
+    - type: bind
+      source: /home/production/panthee.sgn.cornell.edu/sgn_local.conf
+      target: /home/production/cxgn/sgn/sgn_local.conf
+
+    ports:
+      - 8080:8080
+    image: breedbase/breedbase:v0.70
+    depends_on:
+      - breedbase_db
+    container_name: breedbase_web
+    restart: always
+    environment:
+      MODE: 'PRODUCTION'
+      PGDATABASE: "breedbase"
+      PGHOST: "breedbase_db"
+      PGPASSWORD: "postgres"
+      PGUSER: "postgres"
+
+  breedbase_db:
+    restart: always
+    environment:
+      POSTGRES_DB: "breedbase"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    image: postgres:12.7
+    container_name: breedbase_db
+
+volumes:
+  webdata:
+  dbdata:
