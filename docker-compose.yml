@@ -11,6 +11,12 @@ services:
     - type: bind
       source: /home/production/panthee.sgn.cornell.edu/sgn_local.conf
       target: /home/production/cxgn/sgn/sgn_local.conf
+    - type: bind
+      source: /export/prod/jbrowse_panthee
+      target: /home/production/jbrowse
+    - type: bind
+      source: /export/prod/public_panthee
+      target: /home/production/public
 
     ports:
       - 8080:8080
